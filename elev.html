@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim Tanggap Bencana Kaltim</title>
+
+    <link rel="stylesheet" href="css/mymap4.css">
+    <link rel="stylesheet" href="libs/leaflet/leaflet.css">
+    <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+    <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+    <link rel="stylesheet" href="css/leaflet-measure.css">
+
+    <script src="libs/jquery-3.6.1/dist/jquery.min.js"></script>
+    <script src="libs/leaflet/leaflet.js"></script>
+
+    <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        div.transbox {
+            margin: 5px;
+            background-color: #ffffff;
+            opacity: 0.7;
+          }
+          
+          div.transbox p {
+            margin: 5%;
+            font-weight: bold;
+            color: #000000;
+          }
+    </style>
+</head>
+<body>
+
+    <div id="mapdiv" style="border: 1px solid black;"></div>
+    <div id="legenddiv" style="border: 1px solid black;">
+        <div class="legend" >
+            <h5 style="text-align: center; margin-top:10px;">Legenda Peta</h5><hr>
+            <div class="overflow-auto" style="height: 115px;">
+                <div id="final:elevasi_4326" class="legenditem" >
+                    <p style="text-align: center;">Elevasi</p>
+                    <img src="libs/img/legend_elev.jpg" alt="">
+                </div><br>
+                <div id="final_batas_kecamatan" class="legenditem" >
+                    <p style="text-align: center;">Batas Kecamatan</p>
+                    <img src="libs/img/legend_batas.jpg" alt="">
+                </div>
+            
+            </div><hr>
+
+            <h5 style="text-align: center;">Parameter Analisis</h5><hr>
+            <div class="d-flex flex-row flex-nowrap overflow-auto">
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;">
+                    <figure class="figure ">
+                        <p style="margin: 0px; text-align:center;">Peta Mitigasi</p>
+                        <img src="libs/img/mitigasi.jpeg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="100" >
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="index.html">Home</a> </figcaption>
+                    </figure>
+                </div>
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;">
+                    <figure class="figure ">
+                        <p style="margin: 0px; text-align:center;">Batas Administrasi</p>
+                        <img src="libs/img/petabatas.jpeg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="100" >
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="batas.html">Klik untuk melihat</a> </figcaption>
+                    </figure>
+                </div>
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;">
+                    <figure class="figure">
+                        <p style="margin: 0px; text-align:center;">Kemiringan Lereng</p>
+                        <img src="libs/img/slope.jpeg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="120">
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="slope.html">Klik untuk melihat</a> </figcaption>
+                    </figure>
+                </div>       
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;">
+                    <figure class="figure">
+                        <p style="margin: 0px; text-align:center;">Buffer Sungai</p>
+                        <img src="libs/img/buffer.jpeg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="120">
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="sungai.html">Klik untuk melihat</a> </figcaption>
+                    </figure>
+                </div>    
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;">
+                    <figure class="figure">
+                        <p style="margin: 0px; text-align:center;">Penggunaan Lahan</p>
+                        <img src="libs/img/lahan.jpeg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="120">
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="lahan.html">Klik untuk melihat</a> </figcaption>
+                    </figure>
+                </div>  
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;">
+                    <figure class="figure">
+                        <p style="margin: 0px; text-align:center;">Jenis Tanah</p>
+                        <img src="libs/img/tanah.jpeg" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="120">
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="tanah.html">Klik untuk melihat</a> </figcaption>
+                    </figure>
+                </div>  
+                <div class="card card-block mx-2" style="min-width: 150px; border: 1px solid black; margin-top:0px;" >
+                    <figure class="figure">
+                        <p style="margin: 0px; text-align:center;">Curah Hujan</p>
+                        <img src="libs/img/hujan.jpeg" alt="A generic square placeholder image with rounded corners in a figure." width="150" height="100">
+                        <figcaption class="figure-caption" style="text-align: center;">
+                            <a href="hujan.html">Klik untuk melihat</a> </figcaption>
+                    </figure>
+                </div>
+           </div>
+            <hr>
+            <img src="data:image/jpeg;base64,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" alt="" srcset=""
+            width="100" height="100" class="rounded mx-auto d-block">
+            <p style="text-align: center; margin:0;">Teknologi Survei dan Pemetaan Dasar</p>
+            <p style="text-align: center; margin:0;">Sekolah Vokasi</p>
+            <p style="text-align: center; margin:0;">Universitas Gadjah Mada</p>
+
+        </div>
+    </div>
+
+    <script>
+        var mymap = L.map("mapdiv").setView([-1.1516431288550588, 116.65226564330933], 10);
+
+        var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+            {
+                attribution: '© OpenStreetMap',
+                subdomain: ['a','b','c']
+            });
+            
+        osm.addTo(mymap) ;
+
+        var info = L.control();
+
+		info.onAdd = function (mymap) {
+			this._div = L.DomUtil.create('div', 'info');
+			this.update();
+			return this._div;
+		};
+
+		info.update = function (props) {
+			this._div.innerHTML = '<div class="transbox"><h4><b>Peta Elevasi</h4></b>' +  (props ?
+				'<b>' + props.name + '</b><br />' + props.density + '%'
+				: 'Studi Kasus Kabupaten Penajam Paser Utara' + '</div>')
+				
+		};
+
+		info.addTo(mymap);
+
+        var creator = L.control();
+
+		creator.onAdd = function (mymap) {
+			this._div = L.DomUtil.create('div', 'info');
+			this.update();
+			return this._div;
+		};
+
+		creator.update = function (props) {
+			this._div.innerHTML = '<div class="transbox">' +  (props ?
+				'<b>' + props.name + '</b>' + props.density + '%'
+				: 'Dibuat Oleh: Renaldy Bayu' + '<br>' + 'Sumber: Geoportal Penajam</div>')
+				
+		};
+
+		creator.addTo(mymap);
+
+
+
+        var elev = L.tileLayer.wms("/geoserver/wms?", {
+            layers:"final:elevasi_4326",
+            format:"image/png",
+            transparent: true
+        });
+        elev.addTo(mymap)
+
+        var batas_kecamatan = L.tileLayer.wms("/geoserver/wms?", {
+            layers:"final:penajam_batas",
+            format:"image/png",
+            transparent: true
+        });
+        batas_kecamatan.addTo(mymap)
+
+        var basemap = {
+            "OpenStreetMap":osm
+        }
+
+        var overlaymap = {
+            
+            "Elevasi" : elev,
+            "Batas Kecamatan": batas_kecamatan
+        }
+
+        L.control.layers(basemap,overlaymap).addTo(mymap);
+
+
+        mymap.on('click', function(e){
+            var pos = e.latlng;
+            var pt = mymap.latLngToContainerPoint(pos);
+            var w = mymap.getSize().x; var h = mymap.getSize().y; var bnd = mymap.getBounds();
+            var west = bnd.getWest();
+            var east = bnd.getEast();
+            var north = bnd.getNorth();
+            var south = bnd.getSouth();
+            
+            $.ajax({
+                url:"/geoserver/wms",
+                data :{
+                service:"WMS",
+                version:"1.1.1",
+                request:"GetFeatureInfo",
+                info_format:"application/json", layers:'final:elevasi_4326', query_layers: 'final:elevasi_4326',
+                width : w,
+                height : h,
+                x:parseInt(pt.x),
+                y:parseInt(pt.y),
+                bbox:west+','+south+','+east+','+north
+                },
+                success: function(ajaxresult){
+ 
+                    console.log(ajaxresult); 
+                    if(typeof(ajaxresult)!='undefined'){
+                    if(ajaxresult.features.length>0){
+                        var pro = ajaxresult.features[0].properties;
+                         
+                        var content = "<table><tr><th>Field</th><th>Value</th></tr>";
+                        $.each(pro,function(index, value){
+                        content += "<tr><td>" + index + "</td><td>" + value + "</td></tr>";
+                        });
+                         
+                        content += "</table>";
+                        L.popup().setLatLng(pos).setContent(content).openOn(mymap);
+                        }
+                        }
+                        },
+                        error : function(jqXHR, textStatus, errorThrown){
+                        alert("Error");
+                        }
+                        });
+                    });
+        mymap.on('layeradd', function(e){
+            var layerId = e.layer.options.layers.replace(':','_');
+            $('#'+ layerId).show();
+        });
+
+        mymap.on('layerremove', function(e){
+            var layerId = e.layer.options.layers.replace(':','_');
+            $('#'+ layerId).hide();
+        })
+
+    </script>
+</body>
+</html>
